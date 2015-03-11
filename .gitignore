@@ -1,0 +1,15 @@
+atlassian-ide-plugin.xml
+logs
+*.iml
+*.ipr
+*.iws
+#Eclipse-specific
+.settings/
+.classpath
+.project
+nb-configuration.xml
+build/
+.gradle/
+generated_src
+
+.idea

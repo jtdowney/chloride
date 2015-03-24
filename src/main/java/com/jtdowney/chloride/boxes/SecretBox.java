@@ -22,7 +22,6 @@
 
 package com.jtdowney.chloride.boxes;
 
-import com.google.common.io.ByteStreams;
 import com.jtdowney.chloride.keys.SecretKey;
 
 import javax.crypto.Cipher;
@@ -34,6 +33,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.*;
 
 /**
@@ -104,6 +104,22 @@ public class SecretBox {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input);
         CipherInputStream cipherStream = new CipherInputStream(inputStream, cipher);
 
-        return ByteStreams.toByteArray(cipherStream);
+        return readOutput(cipherStream);
+    }
+
+    private byte[] readOutput(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[8192];
+
+        while (true) {
+            int length = inputStream.read(buffer);
+            if (length == -1) {
+                break;
+            }
+
+            outputStream.write(buffer, 0, length);
+        }
+
+        return outputStream.toByteArray();
     }
 }

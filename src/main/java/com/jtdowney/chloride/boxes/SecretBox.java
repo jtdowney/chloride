@@ -63,7 +63,7 @@ public class SecretBox {
      */
     public byte[] encrypt(byte[] plaintext) throws NoSuchProviderException, IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
         byte[] nonce = new byte[12];
-        SecureRandom random = new SecureRandom();
+        SecureRandom random = SecureRandom.getInstance("NativePRNG");
         random.nextBytes(nonce);
 
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");

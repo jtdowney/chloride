@@ -22,6 +22,7 @@
 
 package com.jtdowney.chloride.keys;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
@@ -35,9 +36,9 @@ public class SecretKey {
      * Generate a new 32 byte (256 bit) secret key
      * @return a secret key
      */
-    public static SecretKey generate() {
+    public static SecretKey generate() throws NoSuchAlgorithmException {
         byte[] key = new byte[32];
-        SecureRandom random = new SecureRandom();
+        SecureRandom random = SecureRandom.getInstance("NativePRNG");
         random.nextBytes(key);
         return new SecretKey(key);
     }

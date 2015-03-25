@@ -35,6 +35,7 @@ public class SecretKey {
     /**
      * Generate a new 32 byte (256 bit) secret key
      * @return a secret key
+     * @throws NoSuchAlgorithmException
      */
     public static SecretKey generate() throws NoSuchAlgorithmException {
         byte[] key = new byte[32];

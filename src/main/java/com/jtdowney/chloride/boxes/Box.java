@@ -35,8 +35,8 @@ import java.security.*;
  * Box for asymmetric encryption
  */
 public class Box {
-    private PrivateKey privateKey;
-    private PublicKey publicKey;
+    private final PrivateKey privateKey;
+    private final PublicKey publicKey;
 
     /**
      * Create a new box with the given keys
@@ -52,14 +52,13 @@ public class Box {
      * Encrypt the given plaintext
      * @param plaintext value to encrypt
      * @return the encrypted value
-     * @throws NoSuchProviderException
      * @throws IOException
      * @throws InvalidAlgorithmParameterException
      * @throws NoSuchPaddingException
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
      */
-    public byte[] encrypt(byte[] plaintext) throws InvalidKeyException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException, NoSuchPaddingException, IOException {
+    public byte[] encrypt(byte[] plaintext) throws InvalidKeyException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IOException {
         return this.deriveSecretBox().encrypt(plaintext);
     }
 
@@ -69,12 +68,11 @@ public class Box {
      * @return decrypted value
      * @throws NoSuchPaddingException
      * @throws NoSuchAlgorithmException
-     * @throws NoSuchProviderException
      * @throws InvalidKeyException
      * @throws IOException
      * @throws InvalidAlgorithmParameterException
      */
-    public byte[] decrypt(byte[] ciphertext) throws InvalidKeyException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException, NoSuchPaddingException, IOException {
+    public byte[] decrypt(byte[] ciphertext) throws InvalidKeyException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IOException {
         return this.deriveSecretBox().decrypt(ciphertext);
     }
 

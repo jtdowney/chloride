@@ -32,7 +32,7 @@ import static org.junit.Assert.assertThat;
 
 public class SecretBoxTest {
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public final ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testEncryptAndDecrypt() throws Exception {

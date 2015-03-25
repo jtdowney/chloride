@@ -40,7 +40,7 @@ import java.security.*;
  * Box for symmetric encryption
  */
 public class SecretBox {
-    private byte[] key;
+    private final byte[] key;
 
     /**
      * Create a secret box using the provided secret key.
@@ -54,14 +54,13 @@ public class SecretBox {
      * Encrypt the given plaintext
      * @param plaintext value to encrypt
      * @return the encrypted value
-     * @throws NoSuchProviderException
      * @throws IOException
      * @throws InvalidAlgorithmParameterException
      * @throws NoSuchPaddingException
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
      */
-    public byte[] encrypt(byte[] plaintext) throws NoSuchProviderException, IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
+    public byte[] encrypt(byte[] plaintext) throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
         byte[] nonce = new byte[12];
         SecureRandom random = SecureRandom.getInstance("NativePRNG");
         random.nextBytes(nonce);
@@ -87,12 +86,11 @@ public class SecretBox {
      * @return decrypted value
      * @throws NoSuchPaddingException
      * @throws NoSuchAlgorithmException
-     * @throws NoSuchProviderException
      * @throws InvalidKeyException
      * @throws IOException
      * @throws InvalidAlgorithmParameterException
      */
-    public byte[] decrypt(byte[] ciphertext) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, IOException, InvalidAlgorithmParameterException {
+    public byte[] decrypt(byte[] ciphertext) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IOException, InvalidAlgorithmParameterException {
         byte[] nonce = new byte[12];
         System.arraycopy(ciphertext, 0, nonce, 0, nonce.length);
 

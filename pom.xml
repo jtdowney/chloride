@@ -29,6 +29,11 @@
     <groupId>com.jtdowney</groupId>
     <artifactId>chloride</artifactId>
     <version>0.1.0-SNAPSHOT</version>
+    <url>https://github.com/jtdowney/chloride</url>
+    <description>
+        Chloride provides a simple API over Java's crypto functionality. It uses Bouncy Castle to provide support for
+        modern algorithms. The API is loosely modeled after NaCl and libsodium.
+    </description>
 
     <dependencies>
         <dependency>

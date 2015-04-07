@@ -1,5 +1,7 @@
 # chloride
 
+[![Build Status](https://travis-ci.org/jtdowney/chloride.svg)](https://travis-ci.org/jtdowney/chloride)
+
 Chloride provides a simple API over Java's crypto functionality. It uses [Bouncy Castle](https://www.bouncycastle.org/java.html) to provide support for modern algorithms. The API is loosely modeled after [NaCl](http://nacl.cr.yp.to/) and [libsodium](https://github.com/jedisct1/libsodium).
 
 ## Algorithms

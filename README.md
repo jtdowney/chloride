@@ -31,6 +31,5 @@ byte[] plaintext = box2.decrypt(ciphertext);
 SecretKey key = SecretKey.generate();
 SecretBox box = new SecretBox(key);
 byte[] ciphertext = box.encrypt("too many secrets".getBytes("UTF-8"));
-SecretBox box = new SecretBox(new SecretKey(rawKey));
 byte[] plaintext = box.decrypt(ciphertext);
 ```

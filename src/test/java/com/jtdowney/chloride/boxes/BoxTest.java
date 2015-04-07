@@ -22,13 +22,14 @@
 
 package com.jtdowney.chloride.boxes;
 
+import com.jtdowney.chloride.ChlorideTest;
 import com.jtdowney.chloride.keys.KeyPair;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-public class BoxTest {
+public class BoxTest extends ChlorideTest {
     @Test
     public void testEncryptAndDecrypt() throws Exception {
         KeyPair pair1 = KeyPair.generate();

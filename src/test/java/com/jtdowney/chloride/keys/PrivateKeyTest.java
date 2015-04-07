@@ -22,12 +22,13 @@
 
 package com.jtdowney.chloride.keys;
 
+import com.jtdowney.chloride.ChlorideTest;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-public class PrivateKeyTest {
+public class PrivateKeyTest extends ChlorideTest {
     @Test
     public void testGetBytes() throws Exception {
         KeyPair pair = KeyPair.generate();

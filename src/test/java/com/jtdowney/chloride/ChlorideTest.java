@@ -20,35 +20,18 @@
  * THE SOFTWARE.
  */
 
-package com.jtdowney.chloride.boxes;
+package com.jtdowney.chloride;
 
-import com.jtdowney.chloride.ChlorideTest;
-import com.jtdowney.chloride.keys.SecretKey;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import java.security.Security;
 
-public class SecretBoxTest extends ChlorideTest {
-    @Rule
-    public final ExpectedException thrown = ExpectedException.none();
-
-    @Test
-    public void testEncryptAndDecrypt() throws Exception {
-        SecretKey key = SecretKey.generate();
-        SecretBox box = new SecretBox(key);
-        byte[] ciphertext = box.encrypt("too many secrets".getBytes("UTF-8"));
-        assertThat(box.decrypt(ciphertext), equalTo("too many secrets".getBytes("UTF-8")));
-    }
-
-    @Test
-    public void testMalleabilityProtection() throws Exception {
-        thrown.expectMessage("mac check in GCM failed");
-        SecretBox box = new SecretBox(SecretKey.generate());
-        byte[] ciphertext = box.encrypt("too many secrets".getBytes("UTF-8"));
-        ciphertext[15] -= 1;
-        box.decrypt(ciphertext);
+@Ignore
+public class ChlorideTest {
+    @BeforeClass
+    public static void InstallBouncyCastle() {
+        Security.addProvider(new BouncyCastleProvider());
     }
 }

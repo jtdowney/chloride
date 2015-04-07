@@ -22,13 +22,14 @@
 
 package com.jtdowney.chloride.keys;
 
+import com.jtdowney.chloride.ChlorideTest;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-public class SecretKeyTest {
+public class SecretKeyTest extends ChlorideTest {
     @Test
     public void testGenerateIsCorrectLength() throws Exception {
         SecretKey key = SecretKey.generate();

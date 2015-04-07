@@ -22,14 +22,15 @@
 
 package com.jtdowney.chloride.boxes;
 
+import com.jtdowney.chloride.ChlorideException;
 import com.jtdowney.chloride.keys.PrivateKey;
 import com.jtdowney.chloride.keys.PublicKey;
 import com.jtdowney.chloride.keys.SecretKey;
 
 import javax.crypto.KeyAgreement;
-import javax.crypto.NoSuchPaddingException;
-import java.io.IOException;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Box for asymmetric encryption
@@ -52,28 +53,28 @@ public class Box {
      * Encrypt the given plaintext
      * @param plaintext value to encrypt
      * @return the encrypted value
-     * @throws IOException
-     * @throws InvalidAlgorithmParameterException
-     * @throws NoSuchPaddingException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
+     * @throws ChlorideException when an error occurs during encryption
      */
-    public byte[] encrypt(byte[] plaintext) throws InvalidKeyException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IOException {
-        return this.deriveSecretBox().encrypt(plaintext);
+    public byte[] encrypt(byte[] plaintext) throws ChlorideException {
+        try {
+            return this.deriveSecretBox().encrypt(plaintext);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new ChlorideException(e);
+        }
     }
 
     /**
      * Decrypt the given ciphertext
      * @param ciphertext value to decrypt
      * @return decrypted value
-     * @throws NoSuchPaddingException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws IOException
-     * @throws InvalidAlgorithmParameterException
+     * @throws ChlorideException when an error occurs during encryption
      */
-    public byte[] decrypt(byte[] ciphertext) throws InvalidKeyException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IOException {
-        return this.deriveSecretBox().decrypt(ciphertext);
+    public byte[] decrypt(byte[] ciphertext) throws ChlorideException {
+        try {
+            return this.deriveSecretBox().decrypt(ciphertext);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new ChlorideException(e);
+        }
     }
 
     private SecretBox deriveSecretBox() throws NoSuchAlgorithmException, InvalidKeyException {

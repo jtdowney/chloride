@@ -22,6 +22,7 @@
 
 package com.jtdowney.chloride.boxes;
 
+import com.jtdowney.chloride.ChlorideException;
 import com.jtdowney.chloride.keys.SecretKey;
 
 import javax.crypto.Cipher;
@@ -34,7 +35,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 /**
  * Box for symmetric encryption
@@ -54,55 +58,55 @@ public class SecretBox {
      * Encrypt the given plaintext
      * @param plaintext value to encrypt
      * @return the encrypted value
-     * @throws IOException
-     * @throws InvalidAlgorithmParameterException
-     * @throws NoSuchPaddingException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
+     * @throws ChlorideException when an error occurs during encryption
      */
-    public byte[] encrypt(byte[] plaintext) throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
-        byte[] nonce = new byte[12];
-        SecureRandom random = SecureRandom.getInstance("NativePRNG");
-        random.nextBytes(nonce);
+    public byte[] encrypt(byte[] plaintext) throws ChlorideException {
+        try {
+            byte[] nonce = new byte[12];
+            SecureRandom random = SecureRandom.getInstance("NativePRNG");
+            random.nextBytes(nonce);
 
-        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-        cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(this.key, "AES"), new IvParameterSpec(nonce));
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        CipherOutputStream cipherStream = new CipherOutputStream(output, cipher);
-        cipherStream.write(plaintext);
-        cipherStream.close();
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(this.key, "AES"), new IvParameterSpec(nonce));
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            CipherOutputStream cipherStream = new CipherOutputStream(output, cipher);
+            cipherStream.write(plaintext);
+            cipherStream.close();
 
-        byte[] ciphertext = output.toByteArray();
-        byte[] result = new byte[nonce.length + ciphertext.length];
-        System.arraycopy(nonce, 0, result, 0, nonce.length);
-        System.arraycopy(ciphertext, 0, result, nonce.length, ciphertext.length);
+            byte[] ciphertext = output.toByteArray();
+            byte[] result = new byte[nonce.length + ciphertext.length];
+            System.arraycopy(nonce, 0, result, 0, nonce.length);
+            System.arraycopy(ciphertext, 0, result, nonce.length, ciphertext.length);
 
-        return result;
+            return result;
+        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | IOException e) {
+            throw new ChlorideException(e);
+        }
     }
 
     /**
      * Decrypt the given ciphertext
      * @param ciphertext value to decrypt
      * @return decrypted value
-     * @throws NoSuchPaddingException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws IOException
-     * @throws InvalidAlgorithmParameterException
+     * @throws ChlorideException when an error occurs during encryption
      */
-    public byte[] decrypt(byte[] ciphertext) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IOException, InvalidAlgorithmParameterException {
-        byte[] nonce = new byte[12];
-        System.arraycopy(ciphertext, 0, nonce, 0, nonce.length);
+    public byte[] decrypt(byte[] ciphertext) throws ChlorideException {
+        try {
+            byte[] nonce = new byte[12];
+            System.arraycopy(ciphertext, 0, nonce, 0, nonce.length);
 
-        byte[] input = new byte[ciphertext.length - nonce.length];
-        System.arraycopy(ciphertext, nonce.length, input, 0, input.length);
+            byte[] input = new byte[ciphertext.length - nonce.length];
+            System.arraycopy(ciphertext, nonce.length, input, 0, input.length);
 
-        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-        cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(this.key, "AES"), new IvParameterSpec(nonce));
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(input);
-        CipherInputStream cipherStream = new CipherInputStream(inputStream, cipher);
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(this.key, "AES"), new IvParameterSpec(nonce));
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(input);
+            CipherInputStream cipherStream = new CipherInputStream(inputStream, cipher);
 
-        return readOutput(cipherStream);
+            return readOutput(cipherStream);
+        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | IOException e) {
+            throw new ChlorideException(e);
+        }
     }
 
     private byte[] readOutput(InputStream inputStream) throws IOException {

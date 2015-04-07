@@ -22,6 +22,8 @@
 
 package com.jtdowney.chloride.keys;
 
+import com.jtdowney.chloride.ChlorideException;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -33,24 +35,29 @@ public class SecretKey {
     private byte[] key;
 
     /**
-     * Generate a new 32 byte (256 bit) secret key
-     * @return a secret key
-     * @throws NoSuchAlgorithmException
-     */
-    public static SecretKey generate() throws NoSuchAlgorithmException {
-        byte[] key = new byte[32];
-        SecureRandom random = SecureRandom.getInstance("NativePRNG");
-        random.nextBytes(key);
-        return new SecretKey(key);
-    }
-
-    /**
      * Create a secret key from 32 byte (256 bit) key material
      * @param key a secret key
      */
     public SecretKey(byte[] key) {
         assert key.length == 32;
         this.key = key.clone();
+    }
+
+    /**
+     * Generate a new 32 byte (256 bit) secret key
+     *
+     * @return a secret key
+     * @throws ChlorideException when SecureRandom fails to initialize
+     */
+    public static SecretKey generate() throws ChlorideException {
+        try {
+            byte[] key = new byte[32];
+            SecureRandom random = SecureRandom.getInstance("NativePRNG");
+            random.nextBytes(key);
+            return new SecretKey(key);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ChlorideException(e);
+        }
     }
 
     /**

@@ -22,6 +22,8 @@
 
 package com.jtdowney.chloride.keys;
 
+import com.jtdowney.chloride.ChlorideException;
+
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 
@@ -40,18 +42,20 @@ public class KeyPair {
     /**
      * Generate a new asymmetric key pair
      * @return an asymmetric key pair
-     * @throws NoSuchProviderException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidAlgorithmParameterException
+     * @throws ChlorideException when there is an error generating the key pair
      */
-    public static KeyPair generate() throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-        ECGenParameterSpec spec = new ECGenParameterSpec("prime256v1");
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("EC", "BC");
-        generator.initialize(spec, new SecureRandom());
-        java.security.KeyPair pair = generator.generateKeyPair();
-        PrivateKey privateKey = new PrivateKey(pair.getPrivate());
-        PublicKey publicKey = new PublicKey(pair.getPublic());
-        return new KeyPair(privateKey, publicKey);
+    public static KeyPair generate() throws ChlorideException {
+        try {
+            ECGenParameterSpec spec = new ECGenParameterSpec("prime256v1");
+            KeyPairGenerator generator = KeyPairGenerator.getInstance("EC", "BC");
+            generator.initialize(spec, new SecureRandom());
+            java.security.KeyPair pair = generator.generateKeyPair();
+            PrivateKey privateKey = new PrivateKey(pair.getPrivate());
+            PublicKey publicKey = new PublicKey(pair.getPublic());
+            return new KeyPair(privateKey, publicKey);
+        } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchProviderException e) {
+            throw new ChlorideException(e);
+        }
     }
 
     /**

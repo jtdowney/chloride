@@ -22,6 +22,8 @@
 
 package com.jtdowney.chloride.keys;
 
+import com.jtdowney.chloride.ChlorideException;
+
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -40,12 +42,15 @@ public class PrivateKey {
     /**
      * Create a private key from DER encoded data
      * @param data the DER encoded data
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
+     * @throws ChlorideException when the private key cannot be loaded
      */
-    public PrivateKey(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        KeyFactory keyFactory = KeyFactory.getInstance("ECDH");
-        this.privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(data));
+    public PrivateKey(byte[] data) throws ChlorideException {
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("ECDH");
+            this.privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(data));
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new ChlorideException(e);
+        }
     }
 
     /**

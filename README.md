@@ -35,3 +35,9 @@ SecretBox box = new SecretBox(key);
 byte[] ciphertext = box.encrypt("too many secrets".getBytes("UTF-8"));
 byte[] plaintext = box.decrypt(ciphertext);
 ```
+
+## Security
+
+Chloride uses a random 96-bit nonce value for AES-GCM, which does raise issues if you're encrypting large amounts of data under the same key. That is because the chance of collision with a 96-bit value is much higher. This choice was made due to the specific circumstances on which Chloride was designed to be used. Please be aware of this limitation for your own systems.
+
+If you've discovered a security bug in Chloride, please email [John Downey](mailto:jdowney@gmail.com).

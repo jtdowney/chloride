@@ -26,7 +26,7 @@
 
     <groupId>com.jtdowney</groupId>
     <artifactId>chloride</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
 
     <name>Chloride</name>
     <description>

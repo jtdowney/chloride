@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 
 /**
@@ -66,7 +67,7 @@ public class SecretBox {
             SecureRandom random = SecureRandom.getInstance("NativePRNG");
             random.nextBytes(nonce);
 
-            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding", "BC");
             cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(this.key, "AES"), new IvParameterSpec(nonce));
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             CipherOutputStream cipherStream = new CipherOutputStream(output, cipher);
@@ -79,7 +80,7 @@ public class SecretBox {
             System.arraycopy(ciphertext, 0, result, nonce.length, ciphertext.length);
 
             return result;
-        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | IOException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | NoSuchProviderException | IOException e) {
             throw new ChlorideException(e);
         }
     }
@@ -98,13 +99,13 @@ public class SecretBox {
             byte[] input = new byte[ciphertext.length - nonce.length];
             System.arraycopy(ciphertext, nonce.length, input, 0, input.length);
 
-            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding", "BC");
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(this.key, "AES"), new IvParameterSpec(nonce));
             ByteArrayInputStream inputStream = new ByteArrayInputStream(input);
             CipherInputStream cipherStream = new CipherInputStream(inputStream, cipher);
 
             return readOutput(cipherStream);
-        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | IOException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | NoSuchProviderException | IOException e) {
             throw new ChlorideException(e);
         }
     }
